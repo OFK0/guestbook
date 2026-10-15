@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Guestbook</title>
+  <style>
+    :root { color-scheme: light dark; --fg: #111; --muted: #666; --bg: #fff; --line: #ddd; --accent: #cd2355; }
+    @media (prefers-color-scheme: dark) { :root { --fg: #eee; --muted: #999; --bg: #0b0b0c; --line: #2a2a2d; } }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.5 system-ui, sans-serif; }
+    main { max-width: 40rem; margin: 0 auto; padding: 2.5rem 1rem; }
+    h1 { margin: 0 0 .25rem; font-size: 2rem; }
+    .muted { color: var(--muted); font-size: .875rem; }
+    form { display: grid; gap: .5rem; margin: 2rem 0; }
+    input, textarea, button { font: inherit; padding: .6rem .75rem; border: 1px solid var(--line); background: transparent; color: inherit; border-radius: 0; }
+    textarea { min-height: 5rem; resize: vertical; }
+    button { background: var(--accent); border-color: var(--accent); color: #fff; cursor: pointer; justify-self: start; padding-inline: 1.25rem; }
+    ol { list-style: none; padding: 0; margin: 0; }
+    li { border-top: 1px solid var(--line); padding: 1rem 0; }
+    li p { margin: .25rem 0 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+    footer { border-top: 1px solid var(--line); margin-top: 2rem; padding-top: 1rem; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Guestbook</h1>
+  <p class="muted">Deployed on a Raspberry Pi with piway. Entries are kept in memory: a new deploy starts a fresh book.</p>
+
+  <form method="post" action="/sign">
+    <input name="name" placeholder="Your name" maxlength="{{.MaxName}}" required autocomplete="name">
+    <textarea name="message" placeholder="Say hello…" maxlength="{{.MaxMessage}}" required></textarea>
+    <button type="submit">Sign</button>
+  </form>
+
+  {{if .Entries}}
+  <ol>
+    {{range .Entries}}
+    <li><strong>{{.Name}}</strong> <span class="muted">{{.At.Format "Jan 2, 15:04"}}</span><p>{{.Message}}</p></li>
+    {{end}}
+  </ol>
+  {{else}}
+  <p class="muted">No entries yet. Be the first.</p>
+  {{end}}
+
+  <footer class="muted">
+    Version {{.Version}} · container {{.Host}} · up {{.Up}} · {{.Visits}} visits since it started
+  </footer>
+</main>
+</body>
+</html>

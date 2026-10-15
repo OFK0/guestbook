@@ -1,0 +1,18 @@
+# How piway builds and runs this app: https://github.com/OFK0/piway/blob/main/docs/MANIFEST.md
+piway: 1
+name: guestbook
+
+build:
+  dockerfile: Dockerfile
+  args:
+    VERSION: "1.0"
+
+run:
+  port: 3000
+  memory: 64MiB
+  cpus: 0.5
+  health:
+    path: /healthz
+    interval: 2s
+    timeout: 1s
+    start_period: 5s
